@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">try1</string>
+    <string name="title_activity_loading">loading</string>
+    <string name="admob_app_id">ca-app-pub-1204478601002609~7738312073</string>
+    <string name="banner_ad_unit_id">ca-app-pub-1204478601002609/3823117799</string>
+    <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
+
+</resources>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor = "#000"
+                android:text="오늘의 결과" />
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor = "#000"
+                android:text="아무나 만나지 않는 당신에게..."
+                android:textSize="25dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/test" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    android:gravity = "bottom">
+
+                    <TextView
+                        android:id="@+id/sextype"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="20대 여성"
+                        android:textColor="#fff"
+                        android:textStyle="bold"
+                        android:textSize="25dp" />
+
+                    <TextView
+                        android:id="@+id/emotion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:textStyle="bold"
+                        android:text="Happy"
+                        android:textSize="25dp" />
+                </LinearLayout>
+
+            </FrameLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="분석 결과"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                />
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_marginTop="6dp"
+                android:layout_height="250dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="다운로드 받기" />
+
+                <Button
+                    android:id="@+id/facebook"
+                    android:layout_width="30dp"
+                    android:background="@drawable/facebook"
+                    android:layout_height="30dp"
+                    android:text="" />
+                <Button
+                    android:id="@+id/twitter"
+                    android:layout_width="30dp"
+                    android:background="@drawable/twitter"
+                    android:layout_height="30dp"
+                    android:text="" />
+                <Button
+                    android:id="@+id/instagram"
+                    android:layout_width="30dp"
+                    android:background="@drawable/instagram"
+                    android:layout_height="30dp"
+                    android:text="" />
+                <Button
+                    android:id="@+id/kakaotalk"
+                    android:layout_width="40dp"
+                    android:background="@drawable/kakaotalk"
+                    android:layout_height="30dp"
+                    android:text="" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>
