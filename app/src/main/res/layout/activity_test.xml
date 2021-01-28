@@ -1,64 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".TestActivity"
-    android:weightSum="2"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
-    android:background="#23074d">
+    tools:context=".TestActivity">
 
     <ImageView
-        android:id="@+id/testImage"
+        android:id="@+id/test_iv_face"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:contentDescription="@string/test_image"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/colorPrimaryDark"
+        tools:layout_height="300dp" />
 
-    <LinearLayout
-        android:id="@+id/btnTest"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/test_cl_analysis"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_weight="1">
+        android:onClick="customOnClick"
+        app:layout_constraintBottom_toTopOf="@id/adView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/test_iv_face">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/test_iv_analysis"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/analysis" />
+            android:contentDescription="@string/test_iv_analysis"
+            android:src="@drawable/analysis"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/test_tv_analysis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/b"
             android:gravity="center"
-            android:text="얼굴 분석하기"
-            android:textColor="#fff"
-            android:textSize="18dp" />
+            android:text="@string/test_analysis"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/test_iv_analysis" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    </LinearLayout>
-    <com.google.android.gms.ads.AdView
-
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
-
         android:layout_width="match_parent"
-
         android:layout_height="62dp"
-
-        android:layout_alignParentBottom="true"
-
-        android:layout_centerHorizontal="true"
-
         ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        ads:layout_constraintBottom_toBottomOf="parent" />
 
-        ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

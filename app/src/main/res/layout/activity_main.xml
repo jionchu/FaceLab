@@ -1,141 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".MainActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp">
+    <ImageView
+        android:id="@+id/main_iv_info"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/main_btn_info"
+        android:onClick="customOnClick"
+        android:src="@drawable/information"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_cl_album"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:onClick="customOnClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/main_cl_camera"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/text1"
-                android:layout_marginTop="12dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor = "#000"
-                android:text="오늘의 결과" />
+        <ImageView
+            android:id="@+id/main_iv_album"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/main_iv_album"
+            android:src="@drawable/album_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/text2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor = "#000"
-                android:text="아무나 만나지 않는 당신에게..."
-                android:textSize="25dp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/main_tv_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/b"
+            android:gravity="center"
+            android:text="@string/main_album"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_iv_album" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="12dp"
-                    android:background="@drawable/test" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_cl_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="customOnClick"
+        app:layout_constraintBottom_toBottomOf="@id/main_cl_album"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/main_cl_album">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="vertical"
-                    android:gravity = "bottom">
+        <ImageView
+            android:id="@+id/main_iv_camera"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/main_iv_camera"
+            android:src="@drawable/camera_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/sextype"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="20대 여성"
-                        android:textColor="#fff"
-                        android:textStyle="bold"
-                        android:textSize="25dp" />
+        <TextView
+            android:id="@+id/main_tv_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/b"
+            android:gravity="center"
+            android:text="@string/main_camera"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_iv_camera" />
 
-                    <TextView
-                        android:id="@+id/emotion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#fff"
-                        android:textStyle="bold"
-                        android:text="Happy"
-                        android:textSize="25dp" />
-                </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </FrameLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="분석 결과"
-                android:textColor="#000"
-                android:textStyle="bold"
-                android:textSize="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="8dp"
-                />
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart"
-                android:layout_width="match_parent"
-                android:layout_marginTop="6dp"
-                android:layout_height="250dp"/>
+    <TextView
+        android:id="@+id/main_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:fontFamily="@font/b"
+        android:text="@string/main_title"
+        android:textColor="@color/white"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="다운로드 받기" />
-
-                <Button
-                    android:id="@+id/facebook"
-                    android:layout_width="30dp"
-                    android:background="@drawable/facebook"
-                    android:layout_height="30dp"
-                    android:text="" />
-                <Button
-                    android:id="@+id/twitter"
-                    android:layout_width="30dp"
-                    android:background="@drawable/twitter"
-                    android:layout_height="30dp"
-                    android:text="" />
-                <Button
-                    android:id="@+id/instagram"
-                    android:layout_width="30dp"
-                    android:background="@drawable/instagram"
-                    android:layout_height="30dp"
-                    android:text="" />
-                <Button
-                    android:id="@+id/kakaotalk"
-                    android:layout_width="40dp"
-                    android:background="@drawable/kakaotalk"
-                    android:layout_height="30dp"
-                    android:text="" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-    </ScrollView>
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
