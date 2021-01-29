@@ -103,8 +103,6 @@ public class ResultActivity extends AppCompatActivity {
                     share.setType("image/*");
                     share.putExtra(Intent.EXTRA_STREAM, getImageUri(getApplicationContext(), bitmap));
                     startActivity(Intent.createChooser(share, "공유하기"));
-
-                    finish();
                     break;
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
@@ -118,7 +116,6 @@ public class ResultActivity extends AppCompatActivity {
                     share.putExtra(Intent.EXTRA_STREAM, getImageUri(getApplicationContext(), bitmap));
                     share.setPackage("com.instagram.android");
                     startActivity(share);
-                    finish();
                     break;
                 } catch (ActivityNotFoundException e) {
                     Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
@@ -137,7 +134,6 @@ public class ResultActivity extends AppCompatActivity {
                     intent.setType("image/*");
                     intent.setPackage("com.twitter.android");//트위터 앱과 연결함.
                     startActivity(intent);
-                    finish();
                     break;
                 } catch (ActivityNotFoundException e) {//트위터 앱이 없을때 자동으로 플레이스토어 설치화면으로 이동.
                     Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
@@ -145,10 +141,10 @@ public class ResultActivity extends AppCompatActivity {
                     startActivity(marketLaunch);
                 }
             case R.id.result_fab_download:                 //DOWNLOAD
+                toggleFab();
                 Bitmap bitmap = getBitmapFromView(mScrollView, mScrollView.getChildAt(0).getHeight(), mScrollView.getChildAt(0).getWidth());
                 saveImage(bitmap);
                 Toast.makeText(this, "저장 완료", Toast.LENGTH_LONG).show();
-                finish();
                 break;
         }
 
@@ -183,24 +179,22 @@ public class ResultActivity extends AppCompatActivity {
 
     private void toggleFab() {
         if (isFabOpen) {
-            mFabMenu.setImageResource(R.drawable.out);
+            mFabMenu.setImageResource(R.drawable.more);
             mFabShare.startAnimation(mAniFabClose);
             mFabInsta.startAnimation(mAniFabClose);
             mFabTwitter.startAnimation(mAniFabClose);
             mFabDownload.startAnimation(mAniFabClose);
-            mFabMenu.setClickable(false);
             mFabShare.setClickable(false);
             mFabInsta.setClickable(false);
             mFabTwitter.setClickable(false);
             mFabDownload.setClickable(false);
             isFabOpen = false;
         } else {
-            mFabMenu.setImageResource(R.drawable.more);
+            mFabMenu.setImageResource(R.drawable.out);
             mFabShare.startAnimation(mAniFabOpen);
             mFabInsta.startAnimation(mAniFabOpen);
             mFabTwitter.startAnimation(mAniFabOpen);
             mFabDownload.startAnimation(mAniFabOpen);
-            mFabMenu.setClickable(true);
             mFabShare.setClickable(true);
             mFabInsta.setClickable(true);
             mFabTwitter.setClickable(true);
