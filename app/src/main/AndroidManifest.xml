@@ -16,43 +16,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-
-            android:value="@string/admob_app_id"/>
-
+            android:value="@string/admob_app_id" />
         <meta-data
             android:name="com.samsung.android.icon_container.has_icon_container"
             android:value="true" />
 
-
-        <activity android:name="com.FaceLab.FaceLab.TestActivity" />
-        <activity android:name="com.FaceLab.FaceLab.InfoActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.information" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.FaceLab.FaceLab.ResultActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.realMain" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.FaceLab.FaceLab.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".InfoActivity" />
+        <activity android:name=".TestActivity" />
+        <activity android:name=".ResultActivity" />
         <activity
             android:name="com.soundcloud.android.crop.CropImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.FaceLab.provider"
