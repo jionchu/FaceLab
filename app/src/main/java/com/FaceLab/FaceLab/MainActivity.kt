@@ -49,13 +49,15 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, InfoActivity::class.java)
                 startActivity(intent)
             }
-            R.id.main_cl_album ->                 // 권한 허용에 동의하지 않았을 경우 토스트를 띄웁니다.
+            R.id.main_cl_album -> {
                 if (isPermission) {
                     mDialog!!.show()
                     val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
                     editor.putString("imageType", "album")
                     editor.apply()
-                } else Toast.makeText(this, "사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show()
+                } else  // 권한 허용에 동의하지 않았을 경우 토스트를 띄웁니다.
+                    Toast.makeText(this, "사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show()
+            }
             R.id.main_cl_camera -> {
                 val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
                 editor.putString("imageType", "camera")
@@ -88,55 +90,37 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        try {
-            var bmp: Bitmap? = null
-            if (resultCode != RESULT_OK) {
-                Toast.makeText(this, "이미지 처리 오류", Toast.LENGTH_SHORT).show()
-                if (tempFile != null) {
-                    if (tempFile!!.exists()) {
-                        if (tempFile!!.delete()) {
-                            Log.e("TAG", tempFile!!.absoluteFile.toString() + "삭제 성공")
-                            tempFile = null
-                        }
-                    }
-                }
-                return
+        var bmp: Bitmap? = null
+        //앨범에서 이미지를 선택한 경우
+        if (requestCode == FROM_ALBUM && resultCode == RESULT_OK && data != null) {
+            //이미지를 uri로 저장
+            photoUri = data.data
+            photoUri = cropImage(photoUri)
+        } else if (requestCode == FROM_CAMERA && resultCode == RESULT_OK) { //카메라로 사진을 찍은 경우
+            //이미지 파일을 bitmap으로 저장
+            bmp = BitmapFactory.decodeFile(imageFilePath)
+            //ExifInterface : 이미지가 가지고 있는 정보집합. 여기에선 이미지의 회전값을 알아내기 위해 사용
+            var exif: ExifInterface? = null
+            try {
+                //이미지 정보 불러오기
+                exif = ExifInterface(imageFilePath!!)
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-            //앨범에서 이미지를 선택한 경우
-            if (requestCode == FROM_ALBUM && null != data) {
-                //이미지를 uri로 저장
-                photoUri = data.data
-                photoUri = cropImage(photoUri)
+            val exifOrientation: Int
+            val exifDegree: Int
+            if (exif != null) {
+                //이미지의 회전값 계산
+                exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+                //이미지의 회전값에 따라 어느 정도의 degree만큼 회전시킬지 계산
+                exifDegree = exifOrientationToDegrees(exifOrientation)
+            } else {
+                exifDegree = 0
             }
-            //카메라로 사진을 찍은 경우
-            if (requestCode == FROM_CAMERA) {
-
-                //이미지 파일을 bitmap으로 저장
-                bmp = BitmapFactory.decodeFile(imageFilePath)
-                //ExifInterface : 이미지가 가지고 있는 정보집합. 여기에선 이미지의 회전값을 알아내기 위해 사용
-                var exif: ExifInterface? = null
-                try {
-                    //이미지 정보 불러오기
-                    exif = ExifInterface(imageFilePath!!)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                val exifOrientation: Int
-                val exifDegree: Int
-                if (exif != null) {
-                    //이미지의 회전값 계산
-                    exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-                    //이미지의 회전값에 따라 어느 정도의 degree만큼 회전시킬지 계산
-                    exifDegree = exifOrientationToDegrees(exifOrientation)
-                } else {
-                    exifDegree = 0
-                }
-                bmp = rotate(bmp, exifDegree.toFloat())
-                photoUri = getImageUri(this, bmp)
-                photoUri = cropImage(photoUri)
-            }
-
-            //Uri to Bitmap
+            bmp = rotate(bmp, exifDegree.toFloat())
+            photoUri = getImageUri(this, bmp)
+            photoUri = cropImage(photoUri)
+        } else if (resultCode == RESULT_OK) { //이미지 crop 완료
             try {
                 bmp = MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
             } catch (e: IOException) {
@@ -149,12 +133,19 @@ class MainActivity : AppCompatActivity() {
             val resize = Bitmap.createScaledBitmap(bmp, imageW, imageH, true)
             resize.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             val byteArray = stream.toByteArray()
-            val intent = Intent(this, com.FaceLab.FaceLab.TestActivity::class.java)
+            val intent = Intent(this, TestActivity::class.java)
             intent.putExtra("image", byteArray)
             startActivity(intent)
             tempFile = null
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } else if (resultCode != RESULT_OK) {
+            if (tempFile != null) {
+                if (tempFile!!.exists()) {
+                    if (tempFile!!.delete()) {
+                        Log.e("TAG", tempFile!!.absoluteFile.toString() + "삭제 성공")
+                        tempFile = null
+                    }
+                }
+            }
         }
     }
 
