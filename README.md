@@ -14,7 +14,13 @@ This is a simple face analysis application using AI
 3. You can share the results on SNS directly.
 4. You can save the results as a picture.
 
+## :camera: Screenshots
+<img alt="Screenshot1" src="images/screenshot1.JPG" width="30%"> <img alt="Screenshot2" src="images/screenshot2.JPG" width="30%">
+
+<img alt="Screenshot3" src="images/screenshot3.JPG" width="30%"> <img alt="Screenshot4" src="images/screenshot4.JPG" width="30%">
+
 ## :hammer: Development Environment
+- Java
 - Android Studio @4.0.1
 
 ## :bookmark: Application Version
