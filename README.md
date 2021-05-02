@@ -36,19 +36,8 @@ This is a simple face analysis application using AI
 |       `information`      |  The screen showing developer information  |
 
 ## :books: Libraries Used
-```
-implementation 'androidx.appcompat:appcompat:1.0.2'
-implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-implementation 'com.google.android.material:material:1.0.0'
-testImplementation 'junit:junit:4.12'
-androidTestImplementation 'androidx.test:runner:1.2.0'
-androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-implementation 'com.android.support:support-v4:26.1.0'
-implementation 'com.android.support:design:26.1.0'
-implementation 'com.android.support:cardview-v7:28.0.0'
-implementation 'org.tensorflow:tensorflow-lite:+'
-implementation "gun0912.ted:tedpermission:2.1.0"
-implementation 'com.google.android.gms:play-services-ads:18.0.0'
-implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
-```
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+- [TensorFlow Lite](https://github.com/tensorflow/tflite-support)
+- [TedPermission](https://github.com/ParkSangGwon/TedPermission)
+- [Mobile Ads](https://developers.google.com/ad-manager/mobile-ads-sdk/android/quick-start)
+- [android-crop](https://github.com/jdamcd/android-crop)
