@@ -1,4 +1,4 @@
-package com.FaceLab.FaceLab
+package com.FaceLab.FaceLab.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -20,6 +20,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import com.FaceLab.FaceLab.ApplicationClass
+import com.FaceLab.FaceLab.R
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.soundcloud.android.crop.Crop

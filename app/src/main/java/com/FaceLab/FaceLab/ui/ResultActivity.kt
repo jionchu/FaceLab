@@ -1,4 +1,4 @@
-package com.FaceLab.FaceLab
+package com.FaceLab.FaceLab.ui
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
@@ -20,7 +20,8 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.FaceLab.FaceLab.TestActivity.Companion.getRoundedCornerBitmap
+import com.FaceLab.FaceLab.R
+import com.FaceLab.FaceLab.ui.TestActivity.Companion.getRoundedCornerBitmap
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

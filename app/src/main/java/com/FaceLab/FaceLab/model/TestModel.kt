@@ -1,4 +1,4 @@
-package com.FaceLab.FaceLab
+package com.FaceLab.FaceLab.model
 
 import android.app.Activity
 import android.graphics.*

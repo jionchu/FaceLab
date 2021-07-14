@@ -1,4 +1,4 @@
-package com.FaceLab.FaceLab
+package com.FaceLab.FaceLab.ui
 
 import android.content.Intent
 import android.graphics.*
@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.FaceLab.FaceLab.R
+import com.FaceLab.FaceLab.model.TestModel
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView

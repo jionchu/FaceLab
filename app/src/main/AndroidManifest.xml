@@ -22,16 +22,16 @@
             android:name="com.samsung.android.icon_container.has_icon_container"
             android:value="true" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".TestActivity" />
-        <activity android:name=".ResultActivity" />
+        <activity android:name=".ui.InfoActivity" />
+        <activity android:name=".ui.TestActivity" />
+        <activity android:name=".ui.ResultActivity" />
         <activity
             android:name="com.soundcloud.android.crop.CropImageActivity"
             android:screenOrientation="portrait"

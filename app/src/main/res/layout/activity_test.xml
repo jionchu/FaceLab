@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context=".TestActivity">
+    tools:context=".ui.TestActivity">
 
     <ImageView
         android:id="@+id/test_iv_face"

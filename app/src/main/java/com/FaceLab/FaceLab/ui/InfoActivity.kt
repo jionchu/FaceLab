@@ -1,8 +1,9 @@
-package com.FaceLab.FaceLab
+package com.FaceLab.FaceLab.ui
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.FaceLab.FaceLab.R
 
 class InfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

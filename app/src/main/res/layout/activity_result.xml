@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".ResultActivity">
+    tools:context=".ui.ResultActivity">
 
     <ScrollView
         android:id="@+id/result_scroll"
