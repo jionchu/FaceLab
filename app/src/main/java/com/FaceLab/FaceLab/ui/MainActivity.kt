@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, InfoActivity::class.java)
                 startActivity(intent)
             }
-            R.id.main_cl_album -> {
+            R.id.main_tv_album -> {
                 if (isPermission) {
                     mDialog!!.show()
                     val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 } else  // 권한 허용에 동의하지 않았을 경우 토스트를 띄웁니다.
                     Toast.makeText(this, "사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show()
             }
-            R.id.main_cl_camera -> {
+            R.id.main_tv_camera -> {
                 val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
                 editor.putString("imageType", "camera")
                 editor.apply()
