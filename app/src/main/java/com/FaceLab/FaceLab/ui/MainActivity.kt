@@ -73,7 +73,12 @@ class MainActivity : AppCompatActivity() {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_crop, null, false)
         builder.setView(view)
         mDialog = builder.create()
-        view.findViewById<View>(R.id.dialog_btn_close).setOnClickListener {
+
+        view.findViewById<View>(R.id.dialog_btn_cancel).setOnClickListener {
+            mDialog!!.dismiss()
+        }
+
+        view.findViewById<View>(R.id.dialog_btn_confirm).setOnClickListener {
             val imageType: String = ApplicationClass.sSharedPreferences?.getString("imageType", "album").toString()
             if (imageType == "album") {
                 //앨범에서 이미지 선택하기

@@ -6,7 +6,8 @@
     <string name="main_camera">카메라로 찍기</string>
     <string name="main_iv_camera">카메라 아이콘</string>
     <string name="main_btn_info">정보</string>
-    <string name="dialog_close">닫기</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_confirm">확인</string>
     <string name="dialog_text">위 그림과 같이\n 눈코입이 꽉 차게 크롭해주세요.</string>
     <string name="dialog_image">크롭 예시 이미지</string>
     <string name="test_analysis">얼굴 분석하기</string>
