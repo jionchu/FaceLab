@@ -45,7 +45,7 @@ class ResultActivity : AppCompatActivity() {
     private var mAniFabClose: Animation? = null
     private var isFabOpen = false
     private var mScrollView: ScrollView? = null
-    private var mTvRights: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
@@ -54,7 +54,6 @@ class ResultActivity : AppCompatActivity() {
         val tvEmotion = findViewById<TextView>(R.id.result_tv_emotion)
         val tvResult = findViewById<TextView>(R.id.result_tv_content)
         mScrollView = findViewById(R.id.result_scroll)
-        mTvRights = findViewById(R.id.result_tv_rights)
         mFabMenu = findViewById(R.id.result_fab_menu)
         mFabShare = findViewById(R.id.result_fab_share)
         mFabInsta = findViewById(R.id.result_fab_instagram)
@@ -133,7 +132,6 @@ class ResultActivity : AppCompatActivity() {
                 toggleFab()
                 val bitmap = getBitmapFromView(mScrollView, mScrollView!!.getChildAt(0).height, mScrollView!!.getChildAt(0).width)
                 saveImage(bitmap)
-                Toast.makeText(this, "저장 완료", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -207,22 +205,27 @@ class ResultActivity : AppCompatActivity() {
     }
 
     private fun saveImage(finalBitmap: Bitmap) {
-        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val myDir = File("$root/FaceLab")
         myDir.mkdirs()
-        @SuppressLint("SimpleDateFormat") val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val fname = "FaceLab$timeStamp.jpg"
-        val file = File(myDir, fname)
-        if (file.exists()) mTvRights!!.text = "maybe"
+
+        @SuppressLint("SimpleDateFormat")
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val fileName = "FaceLab-$timeStamp.jpg"
+        val file = File(myDir, fileName)
         file.delete()
+
         try {
             val out = FileOutputStream(file)
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-            /*media broadcasting*/sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)))
+            /*media broadcasting*/
+            sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)))
             out.flush()
             out.close()
+            Toast.makeText(this, "이미지 저장 완료", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             e.printStackTrace()
+            Toast.makeText(this, "이미지 저장 실패", Toast.LENGTH_LONG).show()
         }
     }
 }
