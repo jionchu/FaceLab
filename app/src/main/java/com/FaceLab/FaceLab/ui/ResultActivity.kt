@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
@@ -176,7 +175,7 @@ class ResultActivity : AppCompatActivity() {
 
     private fun toggleFab() {
         if (isFabOpen) {
-            mFabMenu!!.setImageResource(R.drawable.more)
+            mFabMenu!!.setImageResource(R.drawable.ic_more)
             mFabShare!!.startAnimation(mAniFabClose)
             mFabInsta!!.startAnimation(mAniFabClose)
             mFabTwitter!!.startAnimation(mAniFabClose)
@@ -187,7 +186,7 @@ class ResultActivity : AppCompatActivity() {
             mFabDownload!!.isClickable = false
             isFabOpen = false
         } else {
-            mFabMenu!!.setImageResource(R.drawable.out)
+            mFabMenu!!.setImageResource(R.drawable.ic_close)
             mFabShare!!.startAnimation(mAniFabOpen)
             mFabInsta!!.startAnimation(mAniFabOpen)
             mFabTwitter!!.startAnimation(mAniFabOpen)

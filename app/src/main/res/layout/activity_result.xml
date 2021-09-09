@@ -115,7 +115,7 @@
         android:onClick="customOnClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/more" />
+        app:srcCompat="@drawable/ic_more" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/result_fab_share"
