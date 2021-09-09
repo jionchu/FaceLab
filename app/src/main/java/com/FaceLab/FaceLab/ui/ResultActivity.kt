@@ -32,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,10 +65,21 @@ class ResultActivity : AppCompatActivity() {
         mAniFabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         mAniFabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
         val intent = intent
-        val byteArray = intent.getByteArrayExtra("image")!!
-        var bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-        bmp = getRoundedCornerBitmap(bmp)
-        ivFace.setImageBitmap(bmp)
+        val imageUri = Uri.parse(intent.extras!!.getString("imageUri"))
+        var bmp: Bitmap? = null
+
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        val scale = (1024 / bmp!!.width.toFloat())
+        val imageW = (bmp.width * scale).toInt()
+        val imageH = (bmp.height * scale).toInt()
+        bmp = Bitmap.createScaledBitmap(bmp, imageW, imageH, true)
+
+        ivFace.setImageBitmap(getRoundedCornerBitmap(bmp))
 
         //분석 결과 나타내기
         tvSexAge.text = getIntent().getStringExtra("sexAge")

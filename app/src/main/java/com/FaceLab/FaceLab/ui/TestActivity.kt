@@ -2,7 +2,9 @@ package com.FaceLab.FaceLab.ui
 
 import android.content.Intent
 import android.graphics.*
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -13,8 +15,11 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 class TestActivity : AppCompatActivity() {
+    private var imageUri: Uri? = null
     private var byteArray: ByteArray? = null
     private var bmp: Bitmap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,9 +63,19 @@ class TestActivity : AppCompatActivity() {
                 // to the app after tapping on an ad.
             }
         }
-        byteArray = intent.getByteArrayExtra("image")
-        if (byteArray != null)
-            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
+
+        imageUri = Uri.parse(intent.extras!!.getString("imageUri"))
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        val scale = (1024 / bmp!!.width.toFloat())
+        val imageW = (bmp!!.width * scale).toInt()
+        val imageH = (bmp!!.height * scale).toInt()
+        bmp = Bitmap.createScaledBitmap(bmp!!, imageW, imageH, true)
+
         ivFace.setImageBitmap(getRoundedCornerBitmap(bmp))
     }
 
@@ -69,6 +84,7 @@ class TestActivity : AppCompatActivity() {
             val model = TestModel(this, bmp!!)
             model.runModel()
             val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra("imageUri", imageUri.toString())
             intent.putExtra("image", byteArray)
             intent.putExtra("output", model.output)
             intent.putExtra("sexAge", model.ageSex)

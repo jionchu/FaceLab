@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences.Editor
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -102,49 +103,25 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == FROM_ALBUM && resultCode == RESULT_OK && data != null) {
             //이미지를 uri로 저장
             photoUri = data.data
-            photoUri = cropImage(photoUri)
-        } else if (requestCode == FROM_CAMERA && resultCode == RESULT_OK) { //카메라로 사진을 찍은 경우
-            //이미지 파일을 bitmap으로 저장
-            bmp = BitmapFactory.decodeFile(imageFilePath)
-            //ExifInterface : 이미지가 가지고 있는 정보집합. 여기에선 이미지의 회전값을 알아내기 위해 사용
-            var exif: ExifInterface? = null
-            try {
-                //이미지 정보 불러오기
-                exif = ExifInterface(imageFilePath!!)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            val exifOrientation: Int
-            val exifDegree: Int
-            if (exif != null) {
-                //이미지의 회전값 계산
-                exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-                //이미지의 회전값에 따라 어느 정도의 degree만큼 회전시킬지 계산
-                exifDegree = exifOrientationToDegrees(exifOrientation)
-            } else {
-                exifDegree = 0
-            }
-            bmp = rotate(bmp, exifDegree.toFloat())
+            bmp = rotate(MediaStore.Images.Media.getBitmap(contentResolver, photoUri), absolutelyPath(photoUri!!))
             photoUri = getImageUri(this, bmp)
             photoUri = cropImage(photoUri)
-        } else if (resultCode == RESULT_OK) { //이미지 crop 완료
-            try {
-                bmp = MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            val stream = ByteArrayOutputStream()
-            val scale = (1024 / bmp!!.width.toFloat())
-            val imageW = (bmp.width * scale).toInt()
-            val imageH = (bmp.height * scale).toInt()
-            val resize = Bitmap.createScaledBitmap(bmp, imageW, imageH, true)
-            resize.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            val byteArray = stream.toByteArray()
+        }
+        //카메라로 사진을 찍은 경우
+        else if (requestCode == FROM_CAMERA && resultCode == RESULT_OK) {
+            //이미지 파일을 bitmap으로 저장
+            bmp = rotate(BitmapFactory.decodeFile(imageFilePath), imageFilePath!!)
+            photoUri = getImageUri(this, bmp)
+            photoUri = cropImage(photoUri)
+        }
+        //이미지 crop 완료
+        else if (resultCode == RESULT_OK) {
             val intent = Intent(this, TestActivity::class.java)
-            intent.putExtra("image", byteArray)
+            intent.putExtra("imageUri", photoUri.toString())
             startActivity(intent)
             tempFile = null
-        } else if (resultCode != RESULT_OK) {
+        }
+        else if (resultCode != RESULT_OK) {
             if (tempFile != null) {
                 if (tempFile!!.exists()) {
                     if (tempFile!!.delete()) {
@@ -154,6 +131,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // 절대경로 변환
+    fun absolutelyPath(path: Uri): String {
+
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
+        var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c.moveToFirst()
+
+        var result = c.getString(index)
+
+        return result
     }
 
     //권한요청
@@ -194,9 +184,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     //이미지가 사용자가 찍은 방향대로 화면에 보이도록 회전시킴
-    private fun rotate(bitmap: Bitmap?, degree: Float): Bitmap {
+    private fun rotate(bitmap: Bitmap?, imagePath: String): Bitmap {
+        //ExifInterface : 이미지가 가지고 있는 정보집합. 여기에선 이미지의 회전값을 알아내기 위해 사용
+        var exif: ExifInterface? = null
+        try {
+            //이미지 정보 불러오기
+            exif = ExifInterface(imagePath)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        val exifOrientation: Int
+        val exifDegree: Int
+        if (exif != null) {
+            //이미지의 회전값 계산
+            exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            //이미지의 회전값에 따라 어느 정도의 degree만큼 회전시킬지 계산
+            exifDegree = exifOrientationToDegrees(exifOrientation)
+        } else {
+            exifDegree = 0
+        }
+
         val matrix = Matrix()
-        matrix.postRotate(degree)
+        matrix.postRotate(exifDegree.toFloat())
         return Bitmap.createBitmap(bitmap!!, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
