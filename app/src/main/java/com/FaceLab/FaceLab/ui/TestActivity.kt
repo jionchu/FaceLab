@@ -91,6 +91,7 @@ class TestActivity : AppCompatActivity() {
             intent.putExtra("emotion", model.emotion)
             intent.putExtra("result", model.result)
             startActivity(intent)
+            finish()
         }
     }
 
