@@ -8,8 +8,10 @@ import android.content.SharedPreferences.Editor
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -173,7 +175,7 @@ class MainActivity : AppCompatActivity() {
     private fun getImageUri(inContext: Context, inImage: Bitmap?): Uri {
         val bytes = ByteArrayOutputStream()
         inImage!!.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        val path = MediaStore.Images.Media.insertImage(contentResolver, inImage, "FaceLab_"+Calendar.getInstance().time, null)
         return Uri.parse(path)
     }
 
