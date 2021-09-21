@@ -15,7 +15,6 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import java.io.ByteArrayOutputStream
 import java.io.IOException
 
 class TestActivity : AppCompatActivity() {
@@ -25,7 +24,7 @@ class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
-        MobileAds.initialize(this, getString(R.string.admob_app_id))
+        MobileAds.initialize(this) { }
         val ivFace = findViewById<ImageView>(R.id.test_iv_face)
         val adView = findViewById<AdView>(R.id.adView)
         val adRequest = AdRequest.Builder().build()
@@ -39,12 +38,6 @@ class TestActivity : AppCompatActivity() {
                 Log.d("@@@", "onAdLoaded")
             }
 
-            override fun onAdFailedToLoad(errorCode: Int) {
-                // Code to be executed when an ad request fails.
-                // 광고 로드에 문제가 있을시 출력됩니다.
-                Log.d("@@@", "onAdFailedToLoad $errorCode")
-            }
-
             override fun onAdOpened() {
                 // Code to be executed when an ad opens an overlay that
                 // covers the screen.
@@ -52,10 +45,6 @@ class TestActivity : AppCompatActivity() {
 
             override fun onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
-            }
-
-            override fun onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
             }
 
             override fun onAdClosed() {
@@ -98,8 +87,10 @@ class TestActivity : AppCompatActivity() {
     companion object {
         //모서리가 둥근 이미지를 보여주는 함수
         fun getRoundedCornerBitmap(bitmap: Bitmap?): Bitmap {
-            val output = Bitmap.createBitmap(bitmap!!.width, bitmap
-                    .height, Bitmap.Config.ARGB_8888)
+            val output = Bitmap.createBitmap(
+                bitmap!!.width, bitmap
+                    .height, Bitmap.Config.ARGB_8888
+            )
             val canvas = Canvas(output)
             val color = -0xbdbdbe
             val paint = Paint()

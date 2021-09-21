@@ -22,7 +22,8 @@
             android:name="com.samsung.android.icon_container.has_icon_container"
             android:value="true" />
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
