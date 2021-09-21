@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/dialog_iv_example"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:contentDescription="@string/dialog_image"
+        android:padding="40dp"
+        android:src="@drawable/image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dialog_tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/l"
+        android:gravity="center"
+        android:text="@string/dialog_text"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_iv_example"/>
+
+    <Button
+        android:id="@+id/dialog_btn_cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:fontFamily="@font/l"
+        android:text="@string/dialog_cancel"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:paddingBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dialog_btn_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_tv_text" />
+
+    <Button
+        android:id="@+id/dialog_btn_confirm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:fontFamily="@font/l"
+        android:text="@string/dialog_confirm"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/dialog_btn_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_tv_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

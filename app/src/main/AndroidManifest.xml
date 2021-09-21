@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.FaceLab.FaceLab">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".ApplicationClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="FaceLab"
@@ -16,44 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-
-            android:value="@string/admob_app_id"/>
-
+            android:value="@string/admob_app_id" />
         <meta-data
             android:name="com.samsung.android.icon_container.has_icon_container"
             android:value="true" />
 
-
-        <activity android:name="com.FaceLab.FaceLab.TestActivity" />
-        <activity android:name="com.FaceLab.FaceLab.information">
-            <intent-filter>
-                <action android:name="android.intent.action.information" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.FaceLab.FaceLab.realMain">
-            <intent-filter>
-                <action android:name="android.intent.action.realMain" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.FaceLab.FaceLab.MainActivity" />
-        <activity android:name="com.FaceLab.FaceLab.loading">
+        <activity android:name=".ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.InfoActivity" />
+        <activity android:name=".ui.TestActivity" />
+        <activity android:name=".ui.ResultActivity" />
         <activity
             android:name="com.soundcloud.android.crop.CropImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.FaceLab.provider"

@@ -1,8 +1,27 @@
 <resources>
-    <string name="app_name">try1</string>
+    <string name="app_name">FaceLab</string>
+    <string name="main_title">Face Lab</string>
+    <string name="main_album">앨범에서 찾아보기</string>
+    <string name="main_iv_album">앨범 아이콘</string>
+    <string name="main_camera">카메라로 찍기</string>
+    <string name="main_iv_camera">카메라 아이콘</string>
+    <string name="main_btn_info">정보</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_confirm">확인</string>
+    <string name="dialog_text">위 그림과 같이\n 눈코입이 꽉 차게 크롭해주세요.</string>
+    <string name="dialog_image">크롭 예시 이미지</string>
+    <string name="test_analysis">얼굴 분석하기</string>
+    <string name="test_iv_analysis">돋보기 이미지</string>
+    <string name="test_image">분석할 얼굴 이미지</string>
+    <string name="result_emotion">행복한</string>
+    <string name="result_age">여자 20대</string>
+    <string name="result_title">Face Lab의 분석 결과</string>
+    <string name="result_content">아무나 만나지 않는 당신에게…</string>
+    <string name="result_rights">©Face Lab. All rights Reserved.</string>
     <string name="title_activity_loading">loading</string>
     <string name="admob_app_id">ca-app-pub-1204478601002609~7738312073</string>
     <string name="banner_ad_unit_id">ca-app-pub-1204478601002609/3823117799</string>
     <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="info_content">Who made.... \n 박여정 정유진 조유정 추지온 한지수\nContact | FaceLab23@gmail.com \nUsed Tools |\n OpenCV/Tensorflow/Android Studio</string>
 
 </resources>
