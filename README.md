@@ -7,7 +7,7 @@
 ## :wave: Introduction
 This is a simple face analysis application using AI
 1. You can use images from an album or take pictures.
-2. You can obtain results from the following list:
+2. You can get results from the following list:
 - Sex : Male / Female
 - Age : baby / children / elementary school student / middle school student / high school student / 20s / 30s / 40s / 50s / over 60s
 - Emotion : Anger / Disgust / Fear / Happy / Sad / Surprise / Neutral
@@ -19,21 +19,19 @@ This is a simple face analysis application using AI
 
 <img alt="Screenshot3" src="images/screenshot3.JPG" width="30%"> <img alt="Screenshot4" src="images/screenshot4.JPG" width="30%">
 
-## :hammer: Development Environment
-- Java
-- Android Studio @4.0.1
-
-## :bookmark: Application Version
-- minSdkVersion : 15
-- targetSdkVersion : 29
-
 ## :art: Program Structure
 |         Activity         |                         Description                          |
 | :----------------------: | ---------------------------------------------------------- |
+|      `MainActivity`      |  The screen where you select a picture  |
 |      `TestActivity`      |  The screen that displays cropped pictures and moves to the next for analysis  |
-|        `realMain`        |  The screen that proceeds with the analysis and shows the results  |
-|        `loading`         |  The screen where you select a picture  |
-|       `information`      |  The screen showing developer information  |
+|      `ResultActivity`    |  The screen that proceeds with the analysis and shows the results  |
+|      `InfoActivity`      |  The screen showing developer information  |
+
+## :hammer: Development Environment
+- Kotlin
+- Android Studio - Arctic Fox | 2020.3.1
+- minSdkVersion : 21
+- targetSdkVersion : 31
 
 ## :books: Libraries Used
 - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
