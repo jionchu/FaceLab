@@ -11,6 +11,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -20,7 +22,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.FaceLab.FaceLab.R
-import com.FaceLab.FaceLab.ui.TestActivity.Companion.getRoundedCornerBitmap
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -65,20 +66,26 @@ class ResultActivity : AppCompatActivity() {
         mAniFabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
         val intent = intent
         val imageUri = Uri.parse(intent.extras!!.getString("imageUri"))
-        var bmp: Bitmap? = null
 
         try {
-            bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+            val bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+
+            val displayMetrics = DisplayMetrics()
+            windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+
+            val length = displayMetrics.widthPixels - TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                40f,
+                displayMetrics
+            ).toInt()
+
+            ivFace.layoutParams.width = length
+            ivFace.layoutParams.height = length
+            ivFace.setImageBitmap(bmp)
+
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
-        val scale = (1024 / bmp!!.width.toFloat())
-        val imageW = (bmp.width * scale).toInt()
-        val imageH = (bmp.height * scale).toInt()
-        bmp = Bitmap.createScaledBitmap(bmp, imageW, imageH, true)
-
-        ivFace.setImageBitmap(getRoundedCornerBitmap(bmp))
 
         //분석 결과 나타내기
         tvSexAge.text = getIntent().getStringExtra("sexAge")

@@ -5,7 +5,9 @@ import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -56,16 +58,23 @@ class TestActivity : AppCompatActivity() {
         imageUri = Uri.parse(intent.extras!!.getString("imageUri"))
         try {
             bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+
+            val displayMetrics = DisplayMetrics()
+            windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+
+            val length = displayMetrics.widthPixels - TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                40f,
+                displayMetrics
+            ).toInt()
+
+            ivFace.layoutParams.width = length
+            ivFace.layoutParams.height = length
+            ivFace.setImageBitmap(bmp)
+
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
-        val scale = (1024 / bmp!!.width.toFloat())
-        val imageW = (bmp!!.width * scale).toInt()
-        val imageH = (bmp!!.height * scale).toInt()
-        bmp = Bitmap.createScaledBitmap(bmp!!, imageW, imageH, true)
-
-        ivFace.setImageBitmap(getRoundedCornerBitmap(bmp))
     }
 
     fun customOnClick(v: View) {
@@ -81,29 +90,6 @@ class TestActivity : AppCompatActivity() {
             intent.putExtra("result", model.result)
             startActivity(intent)
             finish()
-        }
-    }
-
-    companion object {
-        //모서리가 둥근 이미지를 보여주는 함수
-        fun getRoundedCornerBitmap(bitmap: Bitmap?): Bitmap {
-            val output = Bitmap.createBitmap(
-                bitmap!!.width, bitmap
-                    .height, Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(output)
-            val color = -0xbdbdbe
-            val paint = Paint()
-            val rect = Rect(0, 0, bitmap.width, bitmap.height)
-            val rectF = RectF(rect)
-            val roundPx = 40f
-            paint.isAntiAlias = true
-            canvas.drawARGB(0, 0, 0, 0)
-            paint.color = color
-            canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
-            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-            canvas.drawBitmap(bitmap, rect, rect, paint)
-            return output
         }
     }
 }
