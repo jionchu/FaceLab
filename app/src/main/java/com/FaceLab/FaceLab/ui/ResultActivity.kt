@@ -11,8 +11,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -69,20 +67,7 @@ class ResultActivity : AppCompatActivity() {
 
         try {
             val bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-
-            val displayMetrics = DisplayMetrics()
-            windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-
-            val length = displayMetrics.widthPixels - TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                40f,
-                displayMetrics
-            ).toInt()
-
-            ivFace.layoutParams.width = length
-            ivFace.layoutParams.height = length
             ivFace.setImageBitmap(bmp)
-
         } catch (e: IOException) {
             e.printStackTrace()
         }

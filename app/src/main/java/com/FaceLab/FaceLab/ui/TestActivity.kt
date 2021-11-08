@@ -5,9 +5,7 @@ import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.DisplayMetrics
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -58,20 +56,7 @@ class TestActivity : AppCompatActivity() {
         imageUri = Uri.parse(intent.extras!!.getString("imageUri"))
         try {
             bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-
-            val displayMetrics = DisplayMetrics()
-            windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-
-            val length = displayMetrics.widthPixels - TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                40f,
-                displayMetrics
-            ).toInt()
-
-            ivFace.layoutParams.width = length
-            ivFace.layoutParams.height = length
             ivFace.setImageBitmap(bmp)
-
         } catch (e: IOException) {
             e.printStackTrace()
         }
