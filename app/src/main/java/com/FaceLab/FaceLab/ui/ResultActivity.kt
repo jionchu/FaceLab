@@ -14,19 +14,16 @@ import android.provider.MediaStore
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.ScrollView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.FaceLab.FaceLab.R
+import com.FaceLab.FaceLab.databinding.ActivityResultBinding
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -35,29 +32,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ResultActivity : AppCompatActivity() {
-    private var mFabMenu: FloatingActionButton? = null
-    private var mFabShare: FloatingActionButton? = null
-    private var mFabInsta: FloatingActionButton? = null
-    private var mFabTwitter: FloatingActionButton? = null
-    private var mFabDownload: FloatingActionButton? = null
     private var mAniFabOpen: Animation? = null
     private var mAniFabClose: Animation? = null
     private var isFabOpen = false
-    private var mScrollView: ScrollView? = null
+    private lateinit var binding: ActivityResultBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result)
-        val ivFace = findViewById<ImageView>(R.id.result_iv_face)
-        val tvSexAge = findViewById<TextView>(R.id.result_tv_age)
-        val tvEmotion = findViewById<TextView>(R.id.result_tv_emotion)
-        val tvResult = findViewById<TextView>(R.id.result_tv_content)
-        mScrollView = findViewById(R.id.result_scroll)
-        mFabMenu = findViewById(R.id.result_fab_menu)
-        mFabShare = findViewById(R.id.result_fab_share)
-        mFabInsta = findViewById(R.id.result_fab_instagram)
-        mFabTwitter = findViewById(R.id.result_fab_twitter)
-        mFabDownload = findViewById(R.id.result_fab_download)
+        binding = ActivityResultBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //floating action button 애니메이션 설정
         mAniFabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
@@ -67,76 +50,96 @@ class ResultActivity : AppCompatActivity() {
 
         try {
             val bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-            ivFace.setImageBitmap(bmp)
+            binding.resultIvFace.setImageBitmap(bmp)
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
         //분석 결과 나타내기
-        tvSexAge.text = getIntent().getStringExtra("sexAge")
-        tvEmotion.text = getIntent().getStringExtra("emotion")
-        tvResult.text = getIntent().getStringExtra("result")
+        binding.resultTvAge.text = getIntent().getStringExtra("sexAge")
+        binding.resultTvEmotion.text = getIntent().getStringExtra("emotion")
+        binding.resultTvContent.text = getIntent().getStringExtra("result")
         val output2 = getIntent().getFloatArrayExtra("output")
 
         //차트 부분
         val chart = findViewById<View>(R.id.result_chart) as HorizontalBarChart
         setChart(chart, output2)
+
+        binding.resultFabMenu.setOnClickListener { toggleFab() }
+        binding.resultFabShare.setOnClickListener { resultShare() }
+        binding.resultFabInstagram.setOnClickListener { shareInstagram() }
+        binding.resultFabTwitter.setOnClickListener { shareTwitter() }
+        binding.resultFabDownload.setOnClickListener { download() }
     }
 
-    fun customOnClick(view: View) {
-        when (view.id) {
-            R.id.result_fab_menu -> toggleFab()
-            R.id.result_fab_share -> {
-                toggleFab()
-                try {
-                    val bitmap = getBitmapFromView(mScrollView, mScrollView!!.getChildAt(0).height, mScrollView!!.getChildAt(0).width)
-                    val share = Intent(Intent.ACTION_SEND)
-                    share.type = "image/*"
-                    share.putExtra(Intent.EXTRA_STREAM, getImageUri(applicationContext, bitmap))
-                    startActivity(Intent.createChooser(share, "공유하기"))
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }
-            R.id.result_fab_instagram -> {
-                toggleFab()
-                try {
-                    val bitmap = getBitmapFromView(mScrollView, mScrollView!!.getChildAt(0).height, mScrollView!!.getChildAt(0).width)
-                    val share = Intent(Intent.ACTION_SEND)
-                    share.type = "image/*"
-                    share.putExtra(Intent.EXTRA_STREAM, getImageUri(applicationContext, bitmap))
-                    share.setPackage("com.instagram.android")
-                    startActivity(share)
-                } catch (e: ActivityNotFoundException) {
-                    val marketLaunch = Intent(Intent.ACTION_VIEW)
-                    marketLaunch.data = Uri.parse("market://details?id=com.instagram.android")
-                    startActivity(marketLaunch)
-                }
-            }
-            R.id.result_fab_twitter -> {
-                toggleFab()
-                try {
-                    val bitmap = getBitmapFromView(mScrollView, mScrollView!!.getChildAt(0).height, mScrollView!!.getChildAt(0).width)
-                    val intent = Intent()
-                    intent.action = Intent.ACTION_SEND
-                    intent.putExtra(Intent.EXTRA_TEXT, "얼굴분석결과는 다음과 같습니다 -AI 얼굴분석 앱 [Face Lab]")
-                    intent.type = "text/plain"
-                    intent.putExtra(Intent.EXTRA_STREAM, getImageUri(applicationContext, bitmap))
-                    intent.type = "image/*"
-                    intent.setPackage("com.twitter.android")
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    val marketLaunch = Intent(Intent.ACTION_VIEW)
-                    marketLaunch.data = Uri.parse("market://details?id=com.twitter.android")
-                    startActivity(marketLaunch)
-                }
-            }
-            R.id.result_fab_download -> {
-                toggleFab()
-                val bitmap = getBitmapFromView(mScrollView, mScrollView!!.getChildAt(0).height, mScrollView!!.getChildAt(0).width)
-                saveImage(bitmap)
-            }
+    private fun resultShare() {
+        toggleFab()
+        try {
+            val bitmap = getBitmapFromView(
+                binding.resultScroll,
+                binding.resultScroll.getChildAt(0).height,
+                binding.resultScroll.getChildAt(0).width
+            )
+            val share = Intent(Intent.ACTION_SEND)
+            share.type = "image/*"
+            share.putExtra(Intent.EXTRA_STREAM, getImageUri(applicationContext, bitmap))
+            startActivity(Intent.createChooser(share, "공유하기"))
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
         }
+    }
+
+    private fun shareInstagram() {
+        toggleFab()
+        try {
+            val bitmap = getBitmapFromView(
+                binding.resultScroll,
+                binding.resultScroll.getChildAt(0).height,
+                binding.resultScroll.getChildAt(0).width
+            )
+            val share = Intent(Intent.ACTION_SEND)
+            share.type = "image/*"
+            share.putExtra(Intent.EXTRA_STREAM, getImageUri(applicationContext, bitmap))
+            share.setPackage("com.instagram.android")
+            startActivity(share)
+        } catch (e: ActivityNotFoundException) {
+            val marketLaunch = Intent(Intent.ACTION_VIEW)
+            marketLaunch.data = Uri.parse("market://details?id=com.instagram.android")
+            startActivity(marketLaunch)
+        }
+    }
+
+    private fun shareTwitter() {
+        toggleFab()
+        try {
+            val bitmap = getBitmapFromView(
+                binding.resultScroll,
+                binding.resultScroll.getChildAt(0).height,
+                binding.resultScroll.getChildAt(0).width
+            )
+            val intent = Intent()
+            intent.action = Intent.ACTION_SEND
+            intent.putExtra(Intent.EXTRA_TEXT, "얼굴분석결과는 다음과 같습니다 -AI 얼굴분석 앱 [Face Lab]")
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_STREAM, getImageUri(applicationContext, bitmap))
+            intent.type = "image/*"
+            intent.setPackage("com.twitter.android")
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            val marketLaunch = Intent(Intent.ACTION_VIEW)
+            marketLaunch.data = Uri.parse("market://details?id=com.twitter.android")
+            startActivity(marketLaunch)
+        }
+    }
+
+    private fun download() {
+        toggleFab()
+        val bitmap = getBitmapFromView(
+            binding.resultScroll,
+            binding.resultScroll.getChildAt(0).height,
+            binding.resultScroll.getChildAt(0).width
+        )
+        saveImage(bitmap)
     }
 
     private fun setChart(chart: HorizontalBarChart, data: FloatArray?) {
@@ -150,7 +153,15 @@ class ResultActivity : AppCompatActivity() {
         barEntryList.add(BarEntry(6f, data[6] * 100))
         val barDataSet = BarDataSet(barEntryList, "Feelings")
         val barData = BarData(barDataSet)
-        barDataSet.setColors(Color.rgb(242, 208, 242), Color.rgb(181, 156, 217), Color.rgb(32, 79, 140), Color.rgb(29, 123, 163), Color.rgb(12, 53, 89), Color.rgb(181, 156, 217), Color.rgb(242, 208, 242))
+        barDataSet.setColors(
+            Color.rgb(242, 208, 242),
+            Color.rgb(181, 156, 217),
+            Color.rgb(32, 79, 140),
+            Color.rgb(29, 123, 163),
+            Color.rgb(12, 53, 89),
+            Color.rgb(181, 156, 217),
+            Color.rgb(242, 208, 242)
+        )
         chart.data = barData
         chart.setTouchEnabled(false)
         val xAxis = chart.xAxis
@@ -167,26 +178,26 @@ class ResultActivity : AppCompatActivity() {
 
     private fun toggleFab() {
         if (isFabOpen) {
-            mFabMenu!!.setImageResource(R.drawable.ic_more)
-            mFabShare!!.startAnimation(mAniFabClose)
-            mFabInsta!!.startAnimation(mAniFabClose)
-            mFabTwitter!!.startAnimation(mAniFabClose)
-            mFabDownload!!.startAnimation(mAniFabClose)
-            mFabShare!!.isClickable = false
-            mFabInsta!!.isClickable = false
-            mFabTwitter!!.isClickable = false
-            mFabDownload!!.isClickable = false
+            binding.resultFabMenu.setImageResource(R.drawable.ic_more)
+            binding.resultFabShare.startAnimation(mAniFabClose)
+            binding.resultFabInstagram.startAnimation(mAniFabClose)
+            binding.resultFabTwitter.startAnimation(mAniFabClose)
+            binding.resultFabDownload.startAnimation(mAniFabClose)
+            binding.resultFabShare.isClickable = false
+            binding.resultFabInstagram.isClickable = false
+            binding.resultFabTwitter.isClickable = false
+            binding.resultFabDownload.isClickable = false
             isFabOpen = false
         } else {
-            mFabMenu!!.setImageResource(R.drawable.ic_close)
-            mFabShare!!.startAnimation(mAniFabOpen)
-            mFabInsta!!.startAnimation(mAniFabOpen)
-            mFabTwitter!!.startAnimation(mAniFabOpen)
-            mFabDownload!!.startAnimation(mAniFabOpen)
-            mFabShare!!.isClickable = true
-            mFabInsta!!.isClickable = true
-            mFabTwitter!!.isClickable = true
-            mFabDownload!!.isClickable = true
+            binding.resultFabMenu.setImageResource(R.drawable.ic_close)
+            binding.resultFabShare.startAnimation(mAniFabOpen)
+            binding.resultFabInstagram.startAnimation(mAniFabOpen)
+            binding.resultFabTwitter.startAnimation(mAniFabOpen)
+            binding.resultFabDownload.startAnimation(mAniFabOpen)
+            binding.resultFabShare.isClickable = true
+            binding.resultFabInstagram.isClickable = true
+            binding.resultFabTwitter.isClickable = true
+            binding.resultFabDownload.isClickable = true
             isFabOpen = true
         }
     }
@@ -203,7 +214,8 @@ class ResultActivity : AppCompatActivity() {
     private fun getImageUri(context: Context, inImage: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(context.contentResolver, inImage, "Title", null)
+        val path =
+            MediaStore.Images.Media.insertImage(context.contentResolver, inImage, "Title", null)
         return Uri.parse(path)
     }
 
