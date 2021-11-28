@@ -8,16 +8,13 @@ import android.content.SharedPreferences.Editor
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +22,8 @@ import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import com.FaceLab.FaceLab.ApplicationClass
 import com.FaceLab.FaceLab.R
+import com.FaceLab.FaceLab.databinding.ActivityMainBinding
+import com.FaceLab.FaceLab.databinding.DialogCropBinding
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.soundcloud.android.crop.Crop
@@ -40,53 +39,56 @@ class MainActivity : AppCompatActivity() {
     private var imageFilePath: String? = null
     private var photoUri: Uri? = null
     private var mDialog: AlertDialog? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         tedPermission()
-        setDialog()
-    }
+        initDialog()
 
-    fun customOnClick(v: View) {
-        when (v.id) {
-            R.id.main_iv_info -> {
-                val intent = Intent(this, InfoActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.main_tv_album -> {
-                if (isPermission) {
-                    mDialog!!.show()
-                    val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
-                    editor.putString("imageType", "album")
-                    editor.apply()
-                } else  // 권한 허용에 동의하지 않았을 경우 토스트를 띄웁니다.
-                    Toast.makeText(this, "사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show()
-            }
-            R.id.main_tv_camera -> {
-                if (isPermission) {
-                    mDialog!!.show()
-                    val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
-                    editor.putString("imageType", "camera")
-                    editor.apply()
-                } else  // 권한 허용에 동의하지 않았을 경우 토스트를 띄웁니다.
-                    Toast.makeText(this, "사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show()
-            }
+        binding.mainIvInfo.setOnClickListener {
+            val intent = Intent(this, InfoActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.mainTvAlbum.setOnClickListener {
+            if (isPermission) {
+                mDialog!!.show()
+                val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
+                editor.putString("imageType", "album")
+                editor.apply()
+            } else  // 권한 허용에 동의하지 않았을 경우 토스트를 띄웁니다.
+                Toast.makeText(this, "사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.", Toast.LENGTH_LONG)
+                    .show()
+        }
+
+        binding.mainTvCamera.setOnClickListener {
+            if (isPermission) {
+                mDialog!!.show()
+                val editor: Editor = ApplicationClass.sSharedPreferences!!.edit()
+                editor.putString("imageType", "camera")
+                editor.apply()
+            } else  // 권한 허용에 동의하지 않았을 경우 토스트를 띄웁니다.
+                Toast.makeText(this, "사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.", Toast.LENGTH_LONG)
+                    .show()
         }
     }
 
-    private fun setDialog() {
+    private fun initDialog() {
         val builder = AlertDialog.Builder(this)
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_crop, null, false)
-        builder.setView(view)
+        val dialogBinding: DialogCropBinding = DialogCropBinding.bind(
+            LayoutInflater.from(this).inflate(R.layout.dialog_crop, null, false)
+        )
+        builder.setView(dialogBinding.root)
         mDialog = builder.create()
 
-        view.findViewById<View>(R.id.dialog_btn_cancel).setOnClickListener {
-            mDialog!!.dismiss()
-        }
+        dialogBinding.dialogBtnCancel.setOnClickListener { mDialog!!.dismiss() }
 
-        view.findViewById<View>(R.id.dialog_btn_confirm).setOnClickListener {
-            val imageType: String = ApplicationClass.sSharedPreferences?.getString("imageType", "album").toString()
+        dialogBinding.dialogBtnConfirm.setOnClickListener {
+            val imageType: String =
+                ApplicationClass.sSharedPreferences?.getString("imageType", "album").toString()
             if (imageType == "album") {
                 //앨범에서 이미지 선택하기
                 val intent = Intent(Intent.ACTION_PICK)
@@ -109,7 +111,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == FROM_ALBUM && resultCode == RESULT_OK && data != null) {
             //이미지를 uri로 저장
             photoUri = data.data
-            bmp = rotate(MediaStore.Images.Media.getBitmap(contentResolver, photoUri), absolutelyPath(photoUri!!))
+            bmp = rotate(
+                MediaStore.Images.Media.getBitmap(contentResolver, photoUri),
+                absolutelyPath(photoUri!!)
+            )
             photoUri = getImageUri(this, bmp)
             photoUri = cropImage(photoUri)
         }
@@ -126,8 +131,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("imageUri", photoUri.toString())
             startActivity(intent)
             tempFile = null
-        }
-        else if (resultCode != RESULT_OK) {
+        } else if (resultCode != RESULT_OK) {
             if (tempFile != null) {
                 if (tempFile!!.exists()) {
                     if (tempFile!!.delete()) {
@@ -164,18 +168,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
         TedPermission.with(this)
-                .setPermissionListener(permissionListener)
-                .setRationaleMessage("사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.")
-                .setDeniedMessage("[설정] > [권한]에서 권한을 허용할 수 있습니다.")
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .check()
+            .setPermissionListener(permissionListener)
+            .setRationaleMessage("사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.")
+            .setDeniedMessage("[설정] > [권한]에서 권한을 허용할 수 있습니다.")
+            .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+            .check()
     }
 
     //Uri from Bitmap
     private fun getImageUri(inContext: Context, inImage: Bitmap?): Uri {
         val bytes = ByteArrayOutputStream()
         inImage!!.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(contentResolver, inImage, "FaceLab_"+Calendar.getInstance().time, null)
+        val path = MediaStore.Images.Media.insertImage(
+            contentResolver,
+            inImage,
+            "FaceLab_" + Calendar.getInstance().time,
+            null
+        )
         return Uri.parse(path)
     }
 
@@ -203,7 +212,10 @@ class MainActivity : AppCompatActivity() {
         val exifDegree: Int
         if (exif != null) {
             //이미지의 회전값 계산
-            exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            exifOrientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
             //이미지의 회전값에 따라 어느 정도의 degree만큼 회전시킬지 계산
             exifDegree = exifOrientationToDegrees(exifOrientation)
         } else {
@@ -243,13 +255,14 @@ class MainActivity : AppCompatActivity() {
     //이미지 파일 생성
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        @SuppressLint("SimpleDateFormat") val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        @SuppressLint("SimpleDateFormat") val timeStamp =
+            SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName = "TEST_" + timeStamp + "_"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",  /* suffix */
-                storageDir /* directory */
+            imageFileName,  /* prefix */
+            ".jpg",  /* suffix */
+            storageDir /* directory */
         )
         imageFilePath = image.absolutePath
         Log.d("TAG", "createImageFile : $imageFilePath")
