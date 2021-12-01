@@ -38,3 +38,6 @@ This is a simple face analysis application using AI
   - 이미지 처리 오류 수정
   - 전반적인 UI 개선
   - 리팩토링 (Java > Kotlin migration)
+- v1.2.1 - 2021.11.17
+  - ViewBinding 적용
+  - 둥근 모서리 이미지 처리 방식 변경
